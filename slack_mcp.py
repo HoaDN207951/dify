@@ -35,18 +35,18 @@ class GetHistoryInput(BaseModel):
 # --------------------------
 
 @app.tool()
-def post_message(params: PostMessageInput) -> str:
+def post_message(channel_id, text, bot_token) -> str:
     """
     Post a message to a Slack channel.
     """
-    slack = WebClient(token=params.bot_token)
+    slack = WebClient(token=bot_token)
 
     try:
         result = slack.chat_postMessage(
-            channel=params.channel_id,
-            text=params.text
+            channel=channel_id,
+            text=text
         )
-        return f"Successfully posted to {params.channel_id}. Ts: {result['ts']}"
+        return f"Successfully posted to {channel_id}. Ts: {result['ts']}"
 
     except SlackApiError as e:
         raise RuntimeError(f"Slack API error: {e.response['error']}")
